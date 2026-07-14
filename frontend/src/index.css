@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ledger text-ink font-sans;
+  }
+  /* Visible keyboard focus everywhere — required for WCAG 2.4.7 */
+  :focus-visible {
+    outline: 2px solid theme('colors.brass.DEFAULT');
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50
+           focus:bg-forest focus:text-white focus:px-4 focus:py-2 focus:rounded-md;
+  }
+}
