@@ -13,15 +13,17 @@ export default function Login() {
     setError('')
     setBusy(true)
     try {
-      const fn = mode === 'signin' ? supabase.auth.signInWithPassword : supabase.auth.signUp
-      const { error } = await fn({ email, password })
+      const { error } =
+        mode === 'signin'
+          ? await supabase.auth.signInWithPassword({ email, password })
+          : await supabase.auth.signUp({ email, password })
       // On signup, the database trigger matches this email against
       // email_role_policies and assigns the role — there is no role
       // field on this form for the person to fill in or tamper with.
       if (error) setError(error.message)
     } catch (err) {
       console.error('Auth request failed:', err)
-      setError(`${err.name || 'Error'}: ${err.message || String(err)}`)
+      setError('Something went wrong. Please try again.')
     } finally {
       setBusy(false)
     }
