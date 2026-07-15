@@ -14,11 +14,15 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session)
-      if (session) await loadProfile(session.user.id)
-      setLoading(false)
-    })
+    supabase.auth.getSession()
+      .then(async ({ data: { session } }) => {
+        setSession(session)
+        if (session) await loadProfile(session.user.id)
+      })
+      .catch((err) => {
+        console.error('Failed to load Supabase session — check VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY:', err)
+      })
+      .finally(() => setLoading(false))
 
     const { data: sub } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session)

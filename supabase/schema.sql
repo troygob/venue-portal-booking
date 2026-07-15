@@ -1,7 +1,6 @@
 -- ============================================================
 -- Student Organization Event Approval and Venue Booking Portal
 -- Supabase (Postgres) schema
--- Run this in the Supabase SQL editor, top to bottom.
 -- ============================================================
 
 create extension if not exists "uuid-ossp";
