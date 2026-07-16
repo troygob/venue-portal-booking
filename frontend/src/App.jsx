@@ -17,12 +17,12 @@ export default function App() {
 }
 
 function Shell() {
-  const { session, role, loading } = useAuth()
+  const { session, role, loading, isDemo } = useAuth()
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted" aria-live="polite">Loading…</div>
   }
-  if (!session) return <Login />
+  if (!session && !isDemo) return <Login />
 
   return (
     <div className="flex min-h-screen">

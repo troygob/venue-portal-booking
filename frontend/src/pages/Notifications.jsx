@@ -3,7 +3,7 @@ import { supabase } from '../supabaseClient'
 import { useAuth } from '../context/AuthContext'
 
 export default function Notifications() {
-  const { profile } = useAuth()
+  const { profile, isDemo, demoNotifications, setDemoNotifications } = useAuth()
   const [items, setItems] = useState([])
 
   async function load() {
@@ -15,9 +15,21 @@ export default function Notifications() {
     setItems(data ?? [])
   }
 
-  useEffect(() => { if (profile) load() }, [profile])
+  useEffect(() => {
+    if (!isDemo && profile) load()
+  }, [profile, isDemo])
+
+  const visibleItems = isDemo
+    ? demoNotifications
+        .filter((n) => n.recipient_id === profile.id)
+        .sort((a, b) => new Date(b.date_sent) - new Date(a.date_sent))
+    : items
 
   async function markRead(id) {
+    if (isDemo) {
+      setDemoNotifications((prev) => prev.map((n) => (n.notification_id === id ? { ...n, read_status: 'Read' } : n)))
+      return
+    }
     await supabase.from('notifications').update({ read_status: 'Read' }).eq('notification_id', id)
     setItems((prev) => prev.map((n) => (n.notification_id === id ? { ...n, read_status: 'Read' } : n)))
   }
@@ -30,8 +42,8 @@ export default function Notifications() {
       </header>
 
       <ul className="bg-card border border-line rounded-xl divide-y divide-line" aria-live="polite">
-        {items.length === 0 && <li className="px-4 py-4 text-sm text-muted">No notifications yet.</li>}
-        {items.map((n) => (
+        {visibleItems.length === 0 && <li className="px-4 py-4 text-sm text-muted">No notifications yet.</li>}
+        {visibleItems.map((n) => (
           <li key={n.notification_id}>
             <button
               onClick={() => markRead(n.notification_id)}

@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
+import { useAuth } from '../context/AuthContext'
+import { ROLE_LABELS } from '../lib/roles'
+
+const DEMO_ROLES = ['student', 'dept_head', 'school_admin', 'facilities']
 
 export default function Login() {
+  const { enterDemo } = useAuth()
   const [mode, setMode] = useState('signin') // 'signin' | 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,7 +35,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-ledger px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-ledger px-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm bg-card border border-line rounded-xl p-7 flex flex-col gap-4"
@@ -99,6 +104,25 @@ export default function Login() {
           automatically from your university email — there's nothing to select.
         </p>
       </form>
+
+      <div className="w-full max-w-sm mt-4 bg-card border border-line rounded-xl p-5">
+        <div className="text-xs font-semibold text-muted mb-1">Just want to look around?</div>
+        <p className="text-xs text-muted mb-3">
+          Try the demo — no account needed. Sample data only; nothing here is saved or sent anywhere.
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {DEMO_ROLES.map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => enterDemo(r)}
+              className="text-xs font-semibold border border-line rounded-md px-3 py-2 hover:bg-ledger text-left"
+            >
+              {ROLE_LABELS[r]}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

@@ -5,15 +5,23 @@ import Badge from '../components/Badge'
 import { fmtMoney } from '../lib/roles'
 
 export default function Venues() {
-  const { role } = useAuth()
+  const { role, isDemo, demoVenues, setDemoVenues } = useAuth()
   const [venues, setVenues] = useState([])
 
   useEffect(() => {
-    supabase.from('venues').select('*').order('venue_name').then(({ data }) => setVenues(data ?? []))
-  }, [])
+    if (!isDemo) {
+      supabase.from('venues').select('*').order('venue_name').then(({ data }) => setVenues(data ?? []))
+    }
+  }, [isDemo])
+
+  const visibleVenues = isDemo ? [...demoVenues].sort((a, b) => a.venue_name.localeCompare(b.venue_name)) : venues
 
   async function toggleStatus(v) {
     const next = v.status === 'Available' ? 'Under Maintenance' : 'Available'
+    if (isDemo) {
+      setDemoVenues((prev) => prev.map((x) => (x.venue_id === v.venue_id ? { ...x, status: next } : x)))
+      return
+    }
     const { error } = await supabase.from('venues').update({ status: next }).eq('venue_id', v.venue_id)
     if (!error) setVenues((prev) => prev.map((x) => (x.venue_id === v.venue_id ? { ...x, status: next } : x)))
   }
@@ -28,7 +36,7 @@ export default function Venues() {
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {venues.map((v) => (
+        {visibleVenues.map((v) => (
           <div key={v.venue_id} className="bg-card border border-line rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div className="font-semibold">{v.venue_name}</div>

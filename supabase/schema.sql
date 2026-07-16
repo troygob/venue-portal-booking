@@ -1,6 +1,7 @@
 -- ============================================================
 -- Student Organization Event Approval and Venue Booking Portal
 -- Supabase (Postgres) schema
+-- Run this in the Supabase SQL editor, top to bottom.
 -- ============================================================
 
 create extension if not exists "uuid-ossp";
@@ -19,6 +20,7 @@ create table email_role_policies (
 -- Seed a starting policy set — edit to match the university's real domains.
 insert into email_role_policies (email_pattern, match_type, assigned_role) values
   ('@students.smu.edu.ph', 'domain', 'student'),
+  ('@smu.edu.ph', 'domain', 'student'),
   ('@facilities.smu.edu.ph', 'domain', 'facilities'),
   ('deptheads@smu.edu.ph', 'exact', 'dept_head'), -- replace with a real whitelist row per head
   ('admin@smu.edu.ph', 'exact', 'school_admin');
@@ -66,6 +68,19 @@ create table venues (
   status                 text not null default 'Available' check (status in ('Available', 'Under Maintenance', 'Unavailable'))
 );
 
+-- Seed the campus venue list — edit capacity/fees/notice period to match reality.
+insert into venues (venue_name, capacity, booking_deadline_days) values
+  ('Roces Hall', 300, 5),
+  ('Sacred Heart Center', 500, 7),
+  ('Tonus Gymnasium', 1200, 10),
+  ('St. Therese Hall', 250, 5),
+  ('Hotel', 150, 7),
+  ('Aula Maria Hall', 400, 5),
+  ('RT202', 60, 3),
+  ('RT303', 60, 3),
+  ('AVR1', 80, 3),
+  ('AVR2', 80, 3);
+
 create table event_proposals (
   proposal_id           uuid primary key default uuid_generate_v4(),
   org_id                uuid not null references organizations(org_id),
@@ -80,9 +95,6 @@ create table event_proposals (
   budget_estimate       numeric(10,2),
   status                text not null default 'Pending' check (
     status in ('Pending', 'Under Review', 'Approved', 'Rejected', 'Needs Revision')
-  ),
-  current_stage         text not null default 'dept_head' check (
-    current_stage in ('dept_head', 'school_admin', 'facilities', 'done')
   ),
   date_submitted        timestamptz not null default now()
 );
@@ -197,21 +209,29 @@ create policy "venues writable by facilities" on venues for all using (
   exists (select 1 from profiles where id = auth.uid() and role = 'facilities')
 );
 
--- event_proposals: officers see their org's proposals; approvers see what's routed to their stage
+-- event_proposals: officers see their own; any managerial role sees all
+-- open proposals (no stage-lock — any of the three can review at any time)
 create policy "students see own proposals" on event_proposals for select using (
   officer_id = auth.uid()
   or exists (
     select 1 from profiles p where p.id = auth.uid()
-    and (
-      (p.role = 'dept_head' and current_stage = 'dept_head')
-      or (p.role = 'school_admin' and current_stage = 'school_admin')
-      or (p.role = 'facilities' and current_stage = 'facilities')
-    )
+    and p.role in ('dept_head', 'school_admin', 'facilities')
   )
 );
 create policy "students create own proposals" on event_proposals for insert with check (
   officer_id = auth.uid()
   and exists (select 1 from profiles where id = auth.uid() and role = 'student')
+);
+
+-- approval_steps: the officer who owns the proposal can read decisions and
+-- remarks made on it (needed to show "reviewer feedback" when editing a
+-- proposal marked Needs Revision); staff can read everything.
+create policy "read relevant approval steps" on approval_steps for select using (
+  exists (
+    select 1 from event_proposals ep
+    where ep.proposal_id = approval_steps.proposal_id and ep.officer_id = auth.uid()
+  )
+  or exists (select 1 from profiles where id = auth.uid() and role in ('dept_head', 'school_admin', 'facilities'))
 );
 
 -- notifications: only visible to their recipient
