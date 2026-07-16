@@ -8,8 +8,8 @@ export const DEMO_PROFILES = {
   student: {
     id: 'demo-student',
     email: 'demo.student@students.smu.edu.ph',
-    first_name: 'Reese',
-    last_name: 'Alcala',
+    first_name: 'Pepito',
+    last_name: 'Manaloto',
     role: 'student',
     org_id: 'demo-org',
     department_id: 'demo-dept',
@@ -19,8 +19,8 @@ export const DEMO_PROFILES = {
   dept_head: {
     id: 'demo-dept-head',
     email: 'demo.depthead@smu.edu.ph',
-    first_name: 'Mario',
-    last_name: 'Fajardo',
+    first_name: 'John',
+    last_name: 'Jacinto',
     role: 'dept_head',
     department_id: 'demo-dept',
     position: 'Department Head, Student Affairs',
@@ -30,16 +30,16 @@ export const DEMO_PROFILES = {
     id: 'demo-school-admin',
     email: 'demo.admin@smu.edu.ph',
     first_name: 'Corazon',
-    last_name: 'Villareal',
+    last_name: 'Cruz',
     role: 'school_admin',
-    position: 'School Administrator',
+    position: 'System Administrator',
     verification_status: 'Verified',
   },
   facilities: {
     id: 'demo-facilities',
     email: 'demo.facilities@facilities.smu.edu.ph',
     first_name: 'Ben',
-    last_name: 'Tuazon',
+    last_name: 'Benito',
     role: 'facilities',
     position: 'Facilities Manager',
     verification_status: 'Verified',
@@ -49,16 +49,16 @@ export const DEMO_PROFILES = {
 export const DEMO_ROLE_ORDER = ['student', 'dept_head', 'school_admin', 'facilities']
 
 export const DEMO_VENUES = [
-  { venue_id: 'v-roces', venue_name: 'Roces Hall', location: 'Main Building, 2F', capacity: 300, applicable_fees: 2500, booking_deadline_days: 5, status: 'Available' },
-  { venue_id: 'v-shc', venue_name: 'Sacred Heart Center', location: 'East Wing', capacity: 500, applicable_fees: 5000, booking_deadline_days: 7, status: 'Available' },
-  { venue_id: 'v-tonus', venue_name: 'Tonus Gymnasium', location: 'Athletics Complex', capacity: 1200, applicable_fees: 8000, booking_deadline_days: 10, status: 'Available' },
-  { venue_id: 'v-sthall', venue_name: 'St. Therese Hall', location: 'Main Building, 3F', capacity: 250, applicable_fees: 2000, booking_deadline_days: 5, status: 'Available' },
-  { venue_id: 'v-hotel', venue_name: 'Hotel', location: 'Training Hotel, 1F', capacity: 150, applicable_fees: 6000, booking_deadline_days: 7, status: 'Available' },
-  { venue_id: 'v-aula', venue_name: 'Aula Maria Hall', location: 'Chapel Wing', capacity: 400, applicable_fees: 3000, booking_deadline_days: 5, status: 'Available' },
-  { venue_id: 'v-rt202', venue_name: 'RT202', location: 'Rizal Tower, 2F', capacity: 60, applicable_fees: 500, booking_deadline_days: 3, status: 'Available' },
-  { venue_id: 'v-rt303', venue_name: 'RT303', location: 'Rizal Tower, 3F', capacity: 60, applicable_fees: 500, booking_deadline_days: 3, status: 'Under Maintenance' },
-  { venue_id: 'v-avr1', venue_name: 'AVR1', location: 'Library Annex', capacity: 80, applicable_fees: 800, booking_deadline_days: 3, status: 'Available' },
-  { venue_id: 'v-avr2', venue_name: 'AVR2', location: 'Library Annex', capacity: 80, applicable_fees: 800, booking_deadline_days: 3, status: 'Available' },
+  { venue_id: 'v-roces', venue_name: 'Roces Hall', location: 'Roces Building', capacity: 300, applicable_fees: 2500, booking_deadline_days: 5, status: 'Available' },
+  { venue_id: 'v-shc', venue_name: 'Sacred Heart Center', location: 'UB Park', capacity: 500, applicable_fees: 5000, booking_deadline_days: 7, status: 'Available' },
+  { venue_id: 'v-tonus', venue_name: 'Tonus Gymnasium', location: 'Tonus Gym', capacity: 1200, applicable_fees: 8000, booking_deadline_days: 10, status: 'Available' },
+  { venue_id: 'v-sthall', venue_name: 'St. Therese Hall', location: 'JVD Building, top floor', capacity: 250, applicable_fees: 2000, booking_deadline_days: 5, status: 'Available' },
+  { venue_id: 'v-hotel', venue_name: 'Hotel', location: 'De Buscherre Building', capacity: 150, applicable_fees: 6000, booking_deadline_days: 7, status: 'Available' },
+  { venue_id: 'v-aula', venue_name: 'Aula Maria Hall', location: 'Apo Pilo Top Floor', capacity: 400, applicable_fees: 3000, booking_deadline_days: 5, status: 'Available' },
+  { venue_id: 'v-rt202', venue_name: 'RT202', location: 'RT building, 2F', capacity: 60, applicable_fees: 500, booking_deadline_days: 3, status: 'Available' },
+  { venue_id: 'v-rt303', venue_name: 'RT303', location: 'RT building, 3F', capacity: 60, applicable_fees: 500, booking_deadline_days: 3, status: 'Under Maintenance' },
+  { venue_id: 'v-avr1', venue_name: 'AVR1', location: 'Next to Museo', capacity: 80, applicable_fees: 800, booking_deadline_days: 3, status: 'Available' },
+  { venue_id: 'v-avr2', venue_name: 'AVR2', location: 'L Building, 3rd floor', capacity: 80, applicable_fees: 800, booking_deadline_days: 3, status: 'Available' },
 ]
 
 const today = new Date()
