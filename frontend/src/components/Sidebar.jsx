@@ -138,7 +138,7 @@ export default function Sidebar() {
 
       {/* Desktop sidebar */}
       <aside
-        className="hidden md:flex w-[248px] shrink-0 bg-navy-deep p-5 flex-col text-white min-h-screen"
+        className="hidden md:flex w-[248px] shrink-0 bg-navy-deep p-5 flex-col text-white h-screen sticky top-0 overflow-y-auto"
         aria-label="Main navigation"
       >
         {content}
