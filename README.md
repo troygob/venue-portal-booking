@@ -1,7 +1,7 @@
 # Venue & Event Portal — React + Supabase + Python scaffold
 
 Rebuild of the vanilla-JS prototype (`venue_booking.html` / `styles.css` / `scripts.js`)
-onto a real stack, restyled to Saint Mary's University's blue-and-gold visual identity.
+onto a real stack
 
 ## How the pieces fit together
 
@@ -67,7 +67,7 @@ Wired up and functional: auth + auto role assignment, dashboard, submit proposal
 live capacity/conflict checks), approval queue (approve/reject/request revision), venues
 (with facilities-only status toggle), notifications.
 
-Left for you to extend: file attachments (wire to Supabase Storage — `proposal_attachments.storage_path`
+Left to extend: file attachments (wire to Supabase Storage — `proposal_attachments.storage_path`
 already anticipates this), the activity/audit log page (the `audit_log` table and API writes
 exist; there's no page reading it yet), and email delivery for `channel = 'Email'` notifications
 (currently only logged to the table — plug in Supabase's SMTP integration or a provider like Resend).
