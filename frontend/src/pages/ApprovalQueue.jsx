@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Check, Undo2, X, Users, Wallet, Clock3 } from 'lucide-react'
 import { supabase, apiPost } from '../supabaseClient'
 import { useAuth } from '../context/AuthContext'
 import { fmtMoney, ROLE_LABELS } from '../lib/roles'
@@ -111,10 +112,10 @@ export default function ApprovalQueue() {
   return (
     <div>
       <header className="mb-6">
-        <h1 className="font-display text-2xl font-semibold">
+        <h1 className="font-display text-2xl sm:text-3xl font-semibold text-navy-deep">
           {role === 'facilities' ? 'Venue confirmations' : 'Approval queue'}
         </h1>
-        <p className="text-muted text-sm mt-1">
+        <p className="text-muted text-sm mt-1.5 max-w-2xl">
           Any of the three managerial roles can approve, reject, or request revision, at any time —
           but a proposal is only fully approved once all three have signed off. A single reject or
           revision request still applies immediately.
@@ -122,39 +123,44 @@ export default function ApprovalQueue() {
       </header>
 
       {visibleProposals.length === 0 ? (
-        <p className="text-muted text-sm">Nothing waiting on review right now.</p>
+        <div className="bg-card border border-dashed border-line rounded-xl px-4 py-8 text-center">
+          <p className="text-muted text-sm">Nothing waiting on review right now.</p>
+        </div>
       ) : (
         <div className="flex flex-col gap-3.5">
           {visibleProposals.map((p) => {
             const approvedRoles = approvedRolesFor(p)
             const alreadyApprovedByMe = approvedRoles.includes(role)
             return (
-              <div key={p.proposal_id} className="bg-card border border-line rounded-xl p-4">
-                <div className="flex items-center justify-between">
+              <div key={p.proposal_id} className="bg-card border border-line rounded-xl p-4 shadow-card">
+                <div className="flex items-start justify-between gap-3">
                   <div className="font-semibold text-[15px]">{p.event_title}</div>
-                  <span className="font-mono text-xs text-muted">{p.proposal_id.slice(0, 8)}</span>
+                  <span className="font-mono text-xs text-muted shrink-0">{p.proposal_id.slice(0, 8)}</span>
                 </div>
-                <div className="text-muted text-xs mt-1">
-                  {p.event_date} · {p.start_time}–{p.end_time} · {p.estimated_attendance} attendees · {fmtMoney(p.budget_estimate)}
+                <div className="text-muted text-xs mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <span className="flex items-center gap-1"><Clock3 className="w-3.5 h-3.5" aria-hidden="true" />{p.event_date} · {p.start_time}–{p.end_time}</span>
+                  <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" aria-hidden="true" />{p.estimated_attendance} attendees</span>
+                  <span className="flex items-center gap-1"><Wallet className="w-3.5 h-3.5" aria-hidden="true" />{fmtMoney(p.budget_estimate)}</span>
                 </div>
-                <p className="text-sm mt-2">{p.purpose}</p>
+                <p className="text-sm mt-2.5">{p.purpose}</p>
 
-                <div className="text-xs mt-2.5 flex flex-wrap gap-1.5 items-center">
+                <div className="text-xs mt-3 flex flex-wrap gap-1.5 items-center">
                   <span className="text-muted font-semibold">Approvals:</span>
                   {MANAGERIAL_ROLES.map((r) => (
                     <span
                       key={r}
-                      className={`rounded-full px-2 py-0.5 font-semibold ${
-                        approvedRoles.includes(r) ? 'bg-[#E4EDE7] text-forest' : 'bg-ledger text-muted'
+                      className={`rounded-full px-2.5 py-1 font-semibold flex items-center gap-1 ${
+                        approvedRoles.includes(r) ? 'bg-navy-light text-navy-deep' : 'bg-cloud text-muted border border-line'
                       }`}
                     >
-                      {ROLE_LABELS[r]} {approvedRoles.includes(r) ? '✓' : '—'}
+                      {approvedRoles.includes(r) && <Check className="w-3 h-3" aria-hidden="true" />}
+                      {ROLE_LABELS[r]}
                     </span>
                   ))}
                 </div>
 
                 {remarksFor?.proposal_id === p.proposal_id ? (
-                  <div className="mt-3 border border-brass rounded-lg p-3 bg-white">
+                  <div className="mt-3 border border-gold rounded-lg p-3 bg-white">
                     <label htmlFor={`remarks-${p.proposal_id}`} className="text-xs font-semibold text-muted block mb-1">
                       Remarks {remarksFor.decision === 'reject' ? '(required)' : ''}
                     </label>
@@ -163,43 +169,46 @@ export default function ApprovalQueue() {
                       rows={2}
                       value={remarks}
                       onChange={(e) => setRemarks(e.target.value)}
-                      className="w-full border border-line rounded-md px-3 py-2 text-sm"
+                      className="field-input resize-y"
                     />
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-2 mt-2.5">
                       <button
                         onClick={() => decide(p.proposal_id, remarksFor.decision, remarks)}
                         disabled={busyId === p.proposal_id || (remarksFor.decision === 'reject' && !remarks)}
-                        className="text-xs font-semibold bg-forest text-white rounded-md px-3 py-1.5 disabled:opacity-50"
+                        className="btn-primary py-1.5 px-3.5 min-h-0 text-xs"
                       >
                         Confirm
                       </button>
                       <button
                         onClick={() => { setRemarksFor(null); setRemarks('') }}
-                        className="text-xs font-semibold border border-line rounded-md px-3 py-1.5"
+                        className="btn-secondary py-1.5 px-3.5 min-h-0 text-xs"
                       >
                         Cancel
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex gap-2 mt-3 flex-wrap items-center">
+                  <div className="flex gap-2 mt-3.5 flex-wrap items-center">
                     <button
                       onClick={() => decide(p.proposal_id, 'approve')}
                       disabled={busyId === p.proposal_id || alreadyApprovedByMe}
-                      className="text-xs font-semibold bg-forest hover:bg-forest-deep text-white rounded-md px-3 py-1.5 disabled:opacity-50"
+                      className="btn-primary py-1.5 px-3.5 min-h-0 text-xs"
                     >
+                      <Check className="w-3.5 h-3.5" aria-hidden="true" />
                       {alreadyApprovedByMe ? 'You approved this' : 'Approve'}
                     </button>
                     <button
                       onClick={() => setRemarksFor({ proposal_id: p.proposal_id, decision: 'revise' })}
-                      className="text-xs font-semibold border border-brass text-brass-dark rounded-md px-3 py-1.5 hover:bg-brass-soft"
+                      className="btn py-1.5 px-3.5 min-h-0 text-xs border border-gold text-gold-dark hover:bg-gold-soft"
                     >
+                      <Undo2 className="w-3.5 h-3.5" aria-hidden="true" />
                       Request revision
                     </button>
                     <button
                       onClick={() => setRemarksFor({ proposal_id: p.proposal_id, decision: 'reject' })}
-                      className="text-xs font-semibold border border-clay text-clay rounded-md px-3 py-1.5 hover:bg-clay-soft"
+                      className="btn py-1.5 px-3.5 min-h-0 text-xs border border-rose text-rose hover:bg-rose-soft"
                     >
+                      <X className="w-3.5 h-3.5" aria-hidden="true" />
                       Reject
                     </button>
                   </div>

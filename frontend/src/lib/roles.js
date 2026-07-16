@@ -13,6 +13,7 @@ export const NAV_ITEMS = [
   { to: '/submit', label: 'Submit proposal', roles: ['student'] },
   { to: '/queue', label: 'Approval queue', roles: ['dept_head', 'school_admin', 'facilities'] },
   { to: '/venues', label: 'Venues', roles: ['student', 'dept_head', 'school_admin', 'facilities'] },
+  { to: '/calendar', label: 'Availability calendar', roles: ['student', 'dept_head', 'school_admin', 'facilities'] },
   { to: '/notifications', label: 'Notifications', roles: ['student', 'dept_head', 'school_admin', 'facilities'] },
 ]
 

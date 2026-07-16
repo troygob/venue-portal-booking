@@ -1,7 +1,7 @@
 # Venue & Event Portal — React + Supabase + Python scaffold
 
 Rebuild of the vanilla-JS prototype (`venue_booking.html` / `styles.css` / `scripts.js`)
-onto a real stack, keeping the same forest/brass/clay visual identity.
+onto a real stack, restyled to Saint Mary's University's blue-and-gold visual identity.
 
 ## How the pieces fit together
 
@@ -20,6 +20,26 @@ onto a real stack, keeping the same forest/brass/clay visual identity.
   use. Baseline HCI/accessibility choices are built in: visible focus rings, `prefers-reduced-motion`
   support, a skip-to-content link, inline form validation with `role="alert"`/`role="status"`
   messaging, and error prevention (e.g. the capacity check fires before submit, not after a rejection).
+
+## UI redesign (this pass)
+
+1. **SMU color system** — replaced the old forest/brass/clay palette with a Marian
+   navy-blue + gold + white system (`tailwind.config.js`), matching smu.edu.ph's blue-and-white
+   identity with a gold accent drawn from the university emblem. Every text/background pairing
+   was checked against WCAG 2.1 contrast minimums (4.5:1 for body text, 3:1 for large text and
+   UI component borders) — see the comment above the `colors` block.
+2. **Accessibility pass** — status is never color-only (badges carry a dot + text label),
+   form inputs use a `field` border shade that clears 3:1 against white, all interactive
+   elements keep a visible gold focus ring, the mobile nav drawer traps focus visually and
+   restores it, and the new calendar is a proper `role="grid"` with roving-tabindex arrow-key
+   navigation, `aria-current="date"`, and a screen-reader-only day summary per cell.
+3. **Modernized UI/UX** — new type pairing (Fraunces display / Public Sans body), `lucide-react`
+   icons throughout, card elevation via `shadow-card`/`shadow-raised`, a responsive mobile
+   sidebar drawer, empty/loading states with icons, and a restyled login screen.
+4. **Venue Availability Calendar** (`frontend/src/pages/VenueCalendar.jsx`, route `/calendar`) —
+   month-grid view of all venues (or one, via the filter or a `Venues` page deep-link) showing
+   which dates already have Pending/Under Review/Approved proposals, with a day-detail list
+   below the grid. Wired into both demo mode and the live Supabase data path.
 
 ## Setup
 
