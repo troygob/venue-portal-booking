@@ -2,6 +2,12 @@
 
 Rebuild of the vanilla-JS prototype (`venue_booking.html` / `styles.css` / `scripts.js`)
 onto a real stack
+## How to run
+1. Have requirements installed
+2. Clone in VSCode
+3. npm run dev in Console, type o to open and q to quit
+
+<h1>Emails are still broken.</h1>
 
 ## How the pieces fit together
 
