@@ -32,7 +32,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: '#07090F' }}>
+    <div className="min-h-screen flex anim-fade-in" style={{ background: '#07090F' }}>
 
       {/* ── Left hero panel ── */}
       <div
@@ -44,13 +44,13 @@ export default function Login() {
       >
         {/* Decorative rings */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full" style={{ border: '1px solid rgba(200,150,26,0.12)' }} />
-          <div className="absolute -top-20 -right-20 w-[320px] h-[320px] rounded-full" style={{ border: '1px solid rgba(200,150,26,0.08)' }} />
-          <div className="absolute -bottom-60 -left-60 w-[640px] h-[640px] rounded-full" style={{ border: '1px solid rgba(200,150,26,0.07)' }} />
+          <div className="absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full anim-scale-in" style={{ border: '1px solid rgba(200,150,26,0.12)', '--anim-delay': '200ms' } as any} />
+          <div className="absolute -top-20 -right-20 w-[320px] h-[320px] rounded-full anim-scale-in" style={{ border: '1px solid rgba(200,150,26,0.08)', '--anim-delay': '350ms' } as any} />
+          <div className="absolute -bottom-60 -left-60 w-[640px] h-[640px] rounded-full anim-scale-in" style={{ border: '1px solid rgba(200,150,26,0.07)', '--anim-delay': '500ms' } as any} />
         </div>
 
         {/* Top brand */}
-        <div className="relative z-10 flex items-center gap-3">
+        <div className="relative z-10 flex items-center gap-3 anim-slide-left" style={{ '--anim-delay': '60ms' } as any}>
           <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#C8961A,#E4AA20)' }}>
             <Building2 className="w-4.5 h-4.5" style={{ color: '#07090F' }} strokeWidth={2.5} />
           </div>
@@ -63,11 +63,14 @@ export default function Login() {
         {/* Headline */}
         <div className="relative z-10">
           <div
-            className="w-10 h-px mb-6"
-            style={{ background: 'linear-gradient(90deg,#C8961A,transparent)' }}
+            className="w-10 h-px mb-6 anim-slide-left"
+            style={{ background: 'linear-gradient(90deg,#C8961A,transparent)', '--anim-delay': '120ms' } as any}
             aria-hidden="true"
           />
-          <h1 className="font-display text-[3.5rem] leading-[1.0] font-bold tracking-[-0.04em] text-white">
+          <h1
+            className="font-display text-[3.5rem] leading-[1.0] font-bold tracking-[-0.04em] text-white anim-slide-left"
+            style={{ '--anim-delay': '180ms' } as any}
+          >
             From proposal<br />
             to{' '}
             <span style={{
@@ -81,15 +84,22 @@ export default function Login() {
             ,<br />
             in one place.
           </h1>
-          <p className="mt-6 text-[15px] leading-relaxed max-w-xs" style={{ color: 'rgba(255,255,255,0.42)' }}>
+          <p
+            className="mt-6 text-[15px] leading-relaxed max-w-xs anim-slide-left"
+            style={{ color: 'rgba(255,255,255,0.42)', '--anim-delay': '260ms' } as any}
+          >
             Four roles. One workflow. Full traceability from idea to event.
           </p>
         </div>
 
         {/* Role list */}
         <div className="relative z-10 flex flex-col gap-3">
-          {DEMO_ROLES.map((r) => (
-            <div key={r} className="flex items-center gap-3">
+          {DEMO_ROLES.map((r, i) => (
+            <div
+              key={r}
+              className="flex items-center gap-3 anim-slide-left"
+              style={{ '--anim-delay': `${340 + i * 60}ms` } as any}
+            >
               <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: ROLE_META[r].color }} aria-hidden="true" />
               <span className="text-[12px] font-semibold" style={{ color: 'rgba(255,255,255,0.55)' }}>
                 {ROLE_LABELS[r]}
@@ -106,7 +116,7 @@ export default function Login() {
       <div className="flex-1 flex flex-col items-center justify-center px-6 sm:px-12 py-12 overflow-y-auto">
 
         {/* Mobile logo */}
-        <div className="lg:hidden flex items-center gap-2.5 mb-10">
+        <div className="lg:hidden flex items-center gap-2.5 mb-10 anim-fade-up">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#C8961A,#E4AA20)' }}>
             <Building2 className="w-4.5 h-4.5" style={{ color: '#07090F' }} strokeWidth={2.5} />
           </div>
@@ -117,28 +127,39 @@ export default function Login() {
         </div>
 
         <div className="w-full max-w-[380px]">
-          {/* Card */}
+          {/* Card — slides in from right on desktop, fades up on mobile */}
           <div
-            className="rounded-3xl overflow-hidden"
+            className="rounded-3xl overflow-hidden anim-slide-right"
             style={{
               background: '#FEFCF9',
               border: '1px solid rgba(224,217,207,0.8)',
               boxShadow: '0 32px 80px rgba(0,0,0,0.38), 0 2px 8px rgba(0,0,0,0.18)',
-            }}
+              '--anim-delay': '100ms',
+            } as any}
           >
             {/* Gold top bar */}
             <div className="h-[3px]" style={{ background: 'linear-gradient(90deg,#C8961A,#E4AA20,#C8961A)' }} aria-hidden="true" />
 
             <div className="p-8">
-              <h2 className="font-display text-[1.75rem] font-bold text-[#0C111D] tracking-[-0.04em] mb-1">
+              <h2
+                className="font-display text-[1.75rem] font-bold text-[#0C111D] tracking-[-0.04em] mb-1 anim-fade-up"
+                style={{ '--anim-delay': '220ms' } as any}
+              >
                 {mode === 'signin' ? 'Welcome back' : 'Create account'}
               </h2>
-              <p className="text-sm text-[#6B7385] mb-8">
+              <p
+                className="text-sm text-[#6B7385] mb-8 anim-fade-up"
+                style={{ '--anim-delay': '280ms' } as any}
+              >
                 {mode === 'signin' ? 'Sign in with your university email.' : 'Use your university email to register.'}
               </p>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-6" aria-describedby={error ? 'auth-error' : undefined}>
-                <div>
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-6"
+                aria-describedby={error ? 'auth-error' : undefined}
+              >
+                <div className="anim-fade-up" style={{ '--anim-delay': '320ms' } as any}>
                   <label htmlFor="email" className="block text-[10.5px] font-bold tracking-[0.12em] uppercase text-[#6B7385] mb-2">
                     University email
                   </label>
@@ -147,7 +168,7 @@ export default function Login() {
                     placeholder="you@students.smu.edu.ph"
                     className="field-input w-full" />
                 </div>
-                <div>
+                <div className="anim-fade-up" style={{ '--anim-delay': '370ms' } as any}>
                   <label htmlFor="password" className="block text-[10.5px] font-bold tracking-[0.12em] uppercase text-[#6B7385] mb-2">
                     Password
                   </label>
@@ -159,24 +180,36 @@ export default function Login() {
                 </div>
 
                 {error && (
-                  <p id="auth-error" role="alert" className="text-[13px] font-semibold rounded-2xl px-4 py-3" style={{ background: '#FCEAEE', color: '#BD2F4A' }}>
+                  <p id="auth-error" role="alert" className="text-[13px] font-semibold rounded-2xl px-4 py-3 anim-scale-in" style={{ background: '#FCEAEE', color: '#BD2F4A' }}>
                     {error}
                   </p>
                 )}
 
-                <button type="submit" disabled={busy} className="btn-primary w-full mt-2">
+                <button
+                  type="submit"
+                  disabled={busy}
+                  className="btn-primary w-full mt-2 anim-fade-up"
+                  style={{ '--anim-delay': '420ms' } as any}
+                >
                   {busy ? 'Please wait…' : <>{mode === 'signin' ? 'Sign in' : 'Create account'}<ArrowRight className="w-4 h-4" strokeWidth={2.5} aria-hidden="true" /></>}
                 </button>
 
-                <button type="button" onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
-                  className="text-[12.5px] font-semibold text-center hover:underline underline-offset-2" style={{ color: '#103F7A' }}>
+                <button
+                  type="button"
+                  onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+                  className="text-[12.5px] font-semibold text-center hover:underline underline-offset-2 anim-fade-up"
+                  style={{ color: '#103F7A', '--anim-delay': '460ms' } as any}
+                >
                   {mode === 'signin' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
                 </button>
               </form>
             </div>
 
             {/* Demo section */}
-            <div style={{ borderTop: '1px solid #E0D9CF', background: '#F8F5F0', padding: '1.5rem 2rem 2rem' }}>
+            <div
+              className="anim-fade-up"
+              style={{ borderTop: '1px solid #E0D9CF', background: '#F8F5F0', padding: '1.5rem 2rem 2rem', '--anim-delay': '500ms' } as any}
+            >
               <div className="flex items-center gap-2 mb-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C8961A] animate-pulse shrink-0" aria-hidden="true" />
                 <span className="text-[9.5px] font-black tracking-[0.18em] uppercase text-[#C8961A]">Try the demo</span>
@@ -185,13 +218,18 @@ export default function Login() {
                 No account needed — explore all four roles with live sample data.
               </p>
               <div className="grid grid-cols-2 gap-2">
-                {DEMO_ROLES.map((r) => (
+                {DEMO_ROLES.map((r, i) => (
                   <button
                     key={r}
                     type="button"
                     onClick={() => enterDemo(r)}
-                    className="group rounded-2xl p-3 text-left transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.98]"
-                    style={{ background: '#FEFCF9', border: '1px solid #E0D9CF', boxShadow: '0 1px 3px rgba(12,17,29,0.05)' }}
+                    className="rounded-2xl p-3 text-left transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.98] anim-fade-up"
+                    style={{
+                      background: '#FEFCF9',
+                      border: '1px solid #E0D9CF',
+                      boxShadow: '0 1px 3px rgba(12,17,29,0.05)',
+                      '--anim-delay': `${560 + i * 55}ms`,
+                    } as any}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLElement).style.borderColor = ROLE_META[r].color + '50';
                       (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 12px ${ROLE_META[r].color}18`;

@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
+import PageTransition from './components/PageTransition';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import SubmitProposal from './pages/SubmitProposal';
@@ -22,7 +23,11 @@ function Shell() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center flex-col gap-5" style={{ background: '#07090F' }} aria-live="polite">
+      <div
+        className="min-h-screen flex items-center justify-center flex-col gap-5 anim-fade-in"
+        style={{ background: '#07090F' }}
+        aria-live="polite"
+      >
         <div
           className="w-12 h-12 rounded-2xl flex items-center justify-center"
           style={{ background: 'linear-gradient(135deg,#C8961A,#E4AA20)', boxShadow: '0 0 32px rgba(200,150,26,0.35)' }}
@@ -30,7 +35,11 @@ function Shell() {
         >
           <Building2SVG />
         </div>
-        <div className="w-5 h-5 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(200,150,26,0.25)', borderTopColor: '#C8961A' }} aria-hidden="true" />
+        <div
+          className="w-5 h-5 rounded-full border-2 animate-spin"
+          style={{ borderColor: 'rgba(200,150,26,0.25)', borderTopColor: '#C8961A' }}
+          aria-hidden="true"
+        />
       </div>
     );
   }
@@ -43,15 +52,17 @@ function Shell() {
       <Sidebar />
       <main id="main" tabIndex={-1} className="flex-1 min-w-0 overflow-auto" style={{ background: '#F5F4F1' }}>
         <div className="max-w-5xl mx-auto px-5 sm:px-8 py-8 sm:py-10">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/venues" element={<Venues />} />
-            <Route path="/calendar" element={<VenueCalendar />} />
-            <Route path="/notifications" element={<Notifications />} />
-            {role === 'student' && <Route path="/submit" element={<SubmitProposal />} />}
-            {role !== 'student' && <Route path="/queue" element={<ApprovalQueue />} />}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <PageTransition>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/venues" element={<Venues />} />
+              <Route path="/calendar" element={<VenueCalendar />} />
+              <Route path="/notifications" element={<Notifications />} />
+              {role === 'student' && <Route path="/submit" element={<SubmitProposal />} />}
+              {role !== 'student' && <Route path="/queue" element={<ApprovalQueue />} />}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </PageTransition>
         </div>
       </main>
     </div>
