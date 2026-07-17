@@ -22,9 +22,21 @@ function Shell() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-muted gap-2" aria-live="polite">
-        <span className="w-4 h-4 border-2 border-navy rounded-full animate-spin motion-reduce:animate-none" style={{ borderTopColor: '#0F3D73', borderColor: 'rgba(15,61,115,0.3)', borderTopWidth: '2px' }} aria-hidden="true" />
-        Loading…
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0A0F1C' }} aria-live="polite">
+        <div className="flex flex-col items-center gap-4">
+          <div
+            className="w-12 h-12 rounded-2xl flex items-center justify-center"
+            style={{ background: 'linear-gradient(135deg, #C9981F, #E8AE23)' }}
+            aria-hidden="true"
+          >
+            <svg className="w-6 h-6 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              <polyline strokeLinecap="round" strokeLinejoin="round" points="9,22 9,12 15,12 15,22" />
+            </svg>
+          </div>
+          <div className="w-5 h-5 rounded-full border-2 border-gold/30 border-t-gold animate-spin" aria-hidden="true" />
+          <span className="text-sm font-semibold text-white/40 tracking-wide">Loading…</span>
+        </div>
       </div>
     );
   }
@@ -35,16 +47,23 @@ function Shell() {
     <div className="flex flex-col md:flex-row min-h-screen">
       <a href="#main" className="skip-link">Skip to main content</a>
       <Sidebar />
-      <main id="main" tabIndex={-1} className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 max-w-6xl w-full mx-auto">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/venues" element={<Venues />} />
-          <Route path="/calendar" element={<VenueCalendar />} />
-          <Route path="/notifications" element={<Notifications />} />
-          {role === 'student' && <Route path="/submit" element={<SubmitProposal />} />}
-          {role !== 'student' && <Route path="/queue" element={<ApprovalQueue />} />}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+      <main
+        id="main"
+        tabIndex={-1}
+        className="flex-1 min-w-0 overflow-auto"
+        style={{ background: '#F2F5FB' }}
+      >
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/venues" element={<Venues />} />
+            <Route path="/calendar" element={<VenueCalendar />} />
+            <Route path="/notifications" element={<Notifications />} />
+            {role === 'student' && <Route path="/submit" element={<SubmitProposal />} />}
+            {role !== 'student' && <Route path="/queue" element={<ApprovalQueue />} />}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
       </main>
     </div>
   );
