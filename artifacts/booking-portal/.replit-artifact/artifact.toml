@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Venue & Event Portal"
+version = "1.0.0"
+id = "artifacts/booking-portal"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21385
+
+[services.development]
+run = "pnpm --filter @workspace/booking-portal run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/booking-portal", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/booking-portal/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21385"
+BASE_PATH = "/"

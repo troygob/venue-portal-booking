@@ -1,0 +1,112 @@
+@import 'tailwindcss';
+
+@theme {
+  /* SMU Brand Colors — Marian navy-blue + gold + white */
+  --color-ink: #16233B;
+  --color-cloud: #F4F7FB;
+  --color-card: #FFFFFF;
+  --color-navy: #0F3D73;
+  --color-navy-deep: #0A2C54;
+  --color-navy-light: #E7EEF8;
+  --color-gold: #C9A227;
+  --color-gold-soft: #F5E9C8;
+  --color-gold-dark: #6B540F;
+  --color-rose: #7A1F3D;
+  --color-rose-soft: #F6DEE6;
+  --color-line: #C7D2E3;
+  --color-field: #64789E;
+  --color-muted: #4E5F7D;
+
+  /* Typography */
+  --font-display: "Fraunces", serif;
+  --font-sans: "Public Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgb(15 61 115 / 0.06), 0 1px 3px rgb(15 61 115 / 0.08);
+  --shadow-raised: 0 4px 12px rgb(10 44 84 / 0.12);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-cloud text-ink font-sans antialiased;
+  }
+  h1, h2, h3 {
+    @apply font-display;
+  }
+  ::selection {
+    background: #F5E9C8;
+    color: #0A2C54;
+  }
+  :focus-visible {
+    outline: 2px solid #C9A227;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100]
+           focus:bg-navy-deep focus:text-white focus:px-4 focus:py-2.5 focus:rounded-md
+           focus:text-sm focus:font-semibold;
+    box-shadow: 0 4px 12px rgb(10 44 84 / 0.12);
+  }
+  .field-input {
+    @apply w-full bg-white rounded-lg px-3.5 py-2.5 text-sm text-ink
+           placeholder:text-muted transition-colors
+           focus-visible:outline-none focus-visible:ring-2;
+    border: 1px solid color-mix(in srgb, #64789E 60%, transparent);
+    --tw-ring-color: color-mix(in srgb, #C9A227 50%, transparent);
+  }
+  .field-input:focus-visible {
+    border-color: #0F3D73;
+  }
+  .btn, .btn-primary, .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    padding: 0.625rem 1rem;
+    min-height: 40px;
+    transition-property: color, background-color, border-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    cursor: pointer;
+  }
+  .btn:disabled, .btn-primary:disabled, .btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background-color: #0F3D73;
+    color: #FFFFFF;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-color: #0A2C54;
+  }
+  .btn-secondary {
+    border: 1px solid #C7D2E3;
+    background-color: #FFFFFF;
+    color: #16233B;
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background-color: #E7EEF8;
+  }
+}
