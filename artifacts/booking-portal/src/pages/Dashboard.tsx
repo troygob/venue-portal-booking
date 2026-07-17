@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Clock3, CheckCircle2, AlertCircle, Plus, CalendarDays, ArrowRight } from 'lucide-react';
+import { Clock3, CheckCircle2, AlertCircle, Plus, CalendarDays, ArrowUpRight } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../context/AuthContext';
 import Badge, { statusTone } from '../components/Badge';
@@ -13,9 +13,9 @@ export default function Dashboard() {
   useEffect(() => {
     if (isDemo) { setLoading(false); return; }
     async function load() {
-      let query = supabase.from('event_proposals').select('*').order('date_submitted', { ascending: false }).limit(6);
-      if (role === 'student') query = query.eq('officer_id', profile.id);
-      const { data } = await query;
+      let q = supabase.from('event_proposals').select('*').order('date_submitted', { ascending: false }).limit(8);
+      if (role === 'student') q = q.eq('officer_id', profile.id);
+      const { data } = await q;
       setProposals(data ?? []);
       setLoading(false);
     }
@@ -26,23 +26,23 @@ export default function Dashboard() {
     ? (role === 'student' ? demoProposals.filter((p: any) => p.officer_id === profile?.id) : demoProposals)
     : proposals;
 
-  const pending = source.filter((p) => p.status === 'Pending' || p.status === 'Under Review').length;
+  const pending  = source.filter((p) => ['Pending', 'Under Review'].includes(p.status)).length;
   const approved = source.filter((p) => p.status === 'Approved').length;
-  const needsAttention = source.filter((p) => p.status === 'Needs Revision').length;
+  const needsAttn = source.filter((p) => p.status === 'Needs Revision').length;
 
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-8">
         <div>
-          <p className="text-[11px] font-bold tracking-widest uppercase mb-2" style={{ color: '#C9981F' }}>
+          <div className="eyebrow">
             {role === 'student' ? 'My proposals' : 'Overview'}
-          </p>
+          </div>
           <h1 className="page-title">
             {role === 'student' ? 'Proposal tracker' : 'Dashboard'}
           </h1>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5 items-center">
           {role === 'student' && (
             <Link to="/submit" className="btn-primary">
               <Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden="true" />
@@ -56,102 +56,90 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8" role="group" aria-label="Summary statistics">
-        <StatCard
-          value={pending}
-          label="In progress"
-          icon={Clock3}
-          accent="#164E9A"
-          bg="rgba(22,78,154,0.07)"
-        />
-        <StatCard
-          value={approved}
-          label="Approved"
-          icon={CheckCircle2}
-          accent="#0F9B58"
-          bg="rgba(15,155,88,0.07)"
-        />
-        <StatCard
-          value={needsAttention}
-          label="Needs attention"
-          icon={AlertCircle}
-          accent="#C0334F"
-          bg="rgba(192,51,79,0.07)"
-        />
+        <StatCard value={pending}   label="In progress"      color="#103F7A" bg="rgba(16,63,122,0.06)"     icon={Clock3}       />
+        <StatCard value={approved}  label="Approved"         color="#0F9B58" bg="rgba(15,155,88,0.06)"    icon={CheckCircle2} />
+        <StatCard value={needsAttn} label="Needs attention"  color="#BD2F4A" bg="rgba(189,47,74,0.06)"    icon={AlertCircle}  />
       </div>
 
-      {/* Proposals list */}
+      {/* Activity list */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-[13px] font-bold tracking-widest uppercase text-muted">Recent activity</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[10.5px] font-black tracking-[0.15em] uppercase text-[#6B7385]">Recent activity</h2>
           {source.length > 0 && (
-            <Link to={role === 'student' ? '/submit' : '/queue'} className="text-[12px] font-bold text-navy flex items-center gap-1 hover:underline underline-offset-2">
+            <Link
+              to={role === 'student' ? '/submit' : '/queue'}
+              className="text-[11.5px] font-bold flex items-center gap-0.5 hover:underline underline-offset-2"
+              style={{ color: '#103F7A' }}
+            >
               {role === 'student' ? 'New proposal' : 'View queue'}
-              <ArrowRight className="w-3 h-3" strokeWidth={2.5} aria-hidden="true" />
+              <ArrowUpRight className="w-3.5 h-3.5" strokeWidth={2.5} aria-hidden="true" />
             </Link>
           )}
         </div>
 
         {loading ? (
-          <div className="flex items-center gap-2 text-muted text-sm py-4" aria-live="polite">
-            <div className="w-4 h-4 rounded-full border-2 border-navy/20 border-t-navy animate-spin" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-sm py-4" style={{ color: '#6B7385' }} aria-live="polite">
+            <div className="w-4 h-4 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(16,63,122,0.2)', borderTopColor: '#103F7A' }} aria-hidden="true" />
             Loading…
           </div>
         ) : source.length === 0 ? (
           <div
-            className="rounded-2xl px-6 py-10 text-center"
-            style={{ background: '#FFFFFF', border: '2px dashed #D0DAE8' }}
+            className="rounded-2xl px-6 py-12 text-center"
+            style={{ background: '#FEFCF9', border: '1.5px dashed #E0D9CF' }}
           >
-            <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3"
-              style={{ background: '#E4EDF8' }}
-              aria-hidden="true"
-            >
-              <Clock3 className="w-6 h-6 text-navy" strokeWidth={1.75} />
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style={{ background: '#E6EFF8' }} aria-hidden="true">
+              <Clock3 className="w-6 h-6" style={{ color: '#103F7A' }} strokeWidth={1.75} />
             </div>
-            <p className="text-muted text-sm font-medium">
-              {role === 'student' ? "No proposals yet." : "Nothing here yet."}
+            <p className="text-sm font-medium" style={{ color: '#6B7385' }}>
+              {role === 'student' ? 'No proposals yet.' : 'Nothing here yet.'}
             </p>
             {role === 'student' && (
-              <Link to="/submit" className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-navy hover:underline underline-offset-2">
-                Submit your first proposal <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} aria-hidden="true" />
+              <Link to="/submit" className="inline-flex items-center gap-1 mt-3 text-sm font-bold hover:underline underline-offset-2" style={{ color: '#103F7A' }}>
+                Submit your first <ArrowUpRight className="w-3.5 h-3.5" strokeWidth={2.5} aria-hidden="true" />
               </Link>
             )}
           </div>
         ) : (
-          <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', boxShadow: '0 1px 3px rgba(10,15,28,0.07), 0 4px 12px rgba(10,15,28,0.06)', border: '1px solid #D0DAE8' }}>
-            <ul className="divide-y" style={{ divideColor: '#E8EFF6' } as any}>
-              {source.map((p: any, i: number) => (
-                <li
-                  key={p.proposal_id}
-                  className="px-5 py-4 flex items-center gap-4 hover:bg-surface transition-colors"
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{ background: '#FEFCF9', border: '1px solid #E0D9CF', boxShadow: '0 1px 3px rgba(12,17,29,0.05), 0 4px 16px rgba(12,17,29,0.06)' }}
+          >
+            {source.map((p: any, i: number) => (
+              <div
+                key={p.proposal_id}
+                className="px-5 py-4 flex items-center gap-4 transition-colors"
+                style={{
+                  borderTop: i > 0 ? '1px solid #EDE8E2' : 'none',
+                }}
+                onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.background = '#F8F5F0'}
+                onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.background = 'transparent'}
+              >
+                {/* Index */}
+                <span
+                  className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 text-[11px] font-black tabular-nums"
+                  style={{ background: '#EDE8E2', color: '#6B7385' }}
+                  aria-hidden="true"
                 >
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 font-bold text-[13px]"
-                    style={{ background: '#E4EDF8', color: '#164E9A' }}
-                    aria-hidden="true"
-                  >
-                    {i + 1}
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-[13.5px] truncate text-[#0C111D]">{p.event_title}</div>
+                  <div className="text-[11.5px] mt-0.5 truncate" style={{ color: '#6B7385' }}>
+                    {p.venue_name} · {p.event_date}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-[14px] truncate">{p.event_title}</div>
-                    <div className="text-muted text-[12px] mt-0.5">{p.venue_name} · {p.event_date}</div>
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <Badge tone={statusTone(p.status)}>{p.status}</Badge>
-                    {role === 'student' && p.status === 'Needs Revision' && (
-                      <Link
-                        to={`/submit?edit=${p.proposal_id}`}
-                        className="text-[12px] font-bold text-gold-dark underline underline-offset-2 hover:no-underline"
-                      >
-                        Edit
-                      </Link>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <Badge tone={statusTone(p.status)}>{p.status}</Badge>
+                  {role === 'student' && p.status === 'Needs Revision' && (
+                    <Link to={`/submit?edit=${p.proposal_id}`} className="text-[11.5px] font-bold hover:underline underline-offset-2" style={{ color: '#76560A' }}>
+                      Edit
+                    </Link>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -160,31 +148,26 @@ export default function Dashboard() {
 }
 
 function StatCard({
-  value, label, icon: Icon, accent, bg,
-}: {
-  value: number; label: string; icon: React.ComponentType<any>; accent: string; bg: string;
-}) {
+  value, label, color, bg, icon: Icon,
+}: { value: number; label: string; color: string; bg: string; icon: React.ComponentType<any> }) {
   return (
     <div
-      className="rounded-2xl p-5 flex items-start gap-4 relative overflow-hidden"
-      style={{ background: '#FFFFFF', boxShadow: '0 1px 3px rgba(10,15,28,0.07), 0 4px 12px rgba(10,15,28,0.06)', border: '1px solid #D0DAE8' }}
+      className="rounded-2xl p-5 flex items-start gap-4 transition-all duration-220 hover:-translate-y-0.5"
+      style={{
+        background: '#FEFCF9',
+        border: '1px solid #E0D9CF',
+        boxShadow: '0 1px 3px rgba(12,17,29,0.05), 0 4px 16px rgba(12,17,29,0.06)',
+        cursor: 'default',
+      }}
+      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = '0 8px 28px rgba(12,17,29,0.10), 0 2px 6px rgba(12,17,29,0.06)')}
+      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(12,17,29,0.05), 0 4px 16px rgba(12,17,29,0.06)')}
     >
-      {/* Left accent bar */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ background: accent }} aria-hidden="true" />
-      <div
-        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-        style={{ background: bg }}
-        aria-hidden="true"
-      >
-        <Icon className="w-5 h-5" strokeWidth={2} style={{ color: accent }} />
+      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: bg }} aria-hidden="true">
+        <Icon className="w-5 h-5" strokeWidth={2} style={{ color }} />
       </div>
       <div>
-        <div className="text-[11px] font-bold tracking-widest uppercase" style={{ color: accent, opacity: 0.7 }}>
-          {label}
-        </div>
-        <div className="font-display text-4xl font-bold leading-none mt-1" style={{ color: accent }}>
-          {value}
-        </div>
+        <div className="text-[10px] font-black tracking-[0.14em] uppercase" style={{ color, opacity: 0.65 }}>{label}</div>
+        <div className="font-display text-[2.5rem] font-bold leading-none mt-0.5 tracking-[-0.04em]" style={{ color }}>{value}</div>
       </div>
     </div>
   );

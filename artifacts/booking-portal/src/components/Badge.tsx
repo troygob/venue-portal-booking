@@ -1,16 +1,13 @@
 const STYLES: Record<string, string> = {
-  navy: 'bg-navy text-white',
-  gold: 'bg-gold text-white',
-  rose: 'bg-rose text-white',
-  green: 'bg-emerald-600 text-white',
-  muted: 'bg-line-strong/40 text-muted border border-line-strong',
+  navy:  'text-[#103F7A] bg-[#E6EFF8] ring-1 ring-[#103F7A]/15',
+  gold:  'text-[#76560A] bg-[#FBF0D5] ring-1 ring-[#C8961A]/20',
+  rose:  'text-[#BD2F4A] bg-[#FCEAEE] ring-1 ring-[#BD2F4A]/15',
+  muted: 'text-[#6B7385] bg-[#F0EDE8] ring-1 ring-black/5',
 };
 
 export default function Badge({ tone = 'muted', children }: { tone?: string; children: React.ReactNode }) {
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold tracking-wide uppercase ${STYLES[tone] ?? STYLES.muted}`}
-    >
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10.5px] font-bold tracking-wider uppercase ${STYLES[tone] ?? STYLES.muted}`}>
       {children}
     </span>
   );
